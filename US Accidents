@@ -1,0 +1,94 @@
+import pandas as pd
+import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+df_USA.columns
+df_USA.dtypes.value_counts()
+df_USA.shape 
+df_USA.describe()
+df_USA.State.unique
+df1=df_USA[df_USA['State']=='CA']
+df1['IDD'] = df1['ID'].astype('str').str.extractall('(\d+)').unstack().fillna('').sum(axis=1).astype(int)
+df1
+df1.head()
+df1.shape
+df1.columns
+df1.duplicated().sum()
+d1f=df1.dropna(subset=['Precipitation(in)']) 
+df1.shape
+df1.isna().sum()/len(df1)*100
+df1.isna().sum()/len(df1)*100
+df1['Weather_Condition'].value_counts()
+df_num=df1.select_dtypes(np.number)
+col_name=[]
+length=[]
+
+for i in df_num.columns:
+    col_name.append(i)
+    length.append(len(df_num[i].unique()))
+df_2=pd.DataFrame(zip(col_name,length),columns=['feature','count_of_unique_values'])
+df_2
+plt.figure(figsize=(15 ,9))
+sns.heatmap(df_num.corr(), center=0, cmap='Blues',annot=True)
+cities = df1['City'].unique()
+len(cities)
+accidents_by_cities = df1['City'].value_counts()
+accidents_by_cities
+#top 15 cities by number of accident
+accidents_by_cities[:15]
+fig, ax = plt.subplots(figsize=(10,5))
+accidents_by_cities[:15].plot(kind='bar')
+ax.set(title = 'Top 15 cities By Number of Accidents',
+       xlabel = 'Cities',
+       ylabel = 'Accidents Count')
+plt.show()
+accidents_severity = df1.groupby('Severity').count()['ID']
+accidents_severity
+fig, ax = plt.subplots(figsize=(8, 6), subplot_kw=dict(aspect="equal"))
+label = [1,2,3,4]
+plt.pie(accidents_severity, labels=label,
+        autopct='%1.1f%%', pctdistance=0.85)
+circle = plt.Circle( (0,0), 0.5, color='white')
+p=plt.gcf()
+p.gca().add_artist(circle)
+ax.set_title("Accident by Severity",fontdict={'fontsize': 16})
+plt.tight_layout()
+plt.show()
+df1['Start_Time'].dtypes
+df1['End_Time'].dtypes
+df1 = df1.astype({'Start_Time': 'datetime64[ns]', 'End_Time': 'datetime64[ns]'})
+df1['Start_Time'].dtypes
+df1['Start_Time'][2408]
+df1['End_Time'][2408]
+df1['start_date'] = [d.date() for d in df1['Start_Time']]
+df1['start_time'] = [d.time() for d in df1['Start_Time']]
+df1['end_date'] = [d.date() for d in df1['End_Time']]
+df1['end_time'] = [d.time() for d in df1['End_Time']]
+df1['end_time']
+fig, ax = plt.subplots(figsize=(8,5))
+sns.histplot(df1['Start_Time'].dt.hour, bins = 24)
+
+plt.xlabel("Start Time")
+plt.ylabel("Number of Occurence")
+plt.title('Accidents Count By Time of Day')
+
+plt.show()
+fig, ax = plt.subplots(figsize=(8,5))
+sns.histplot(df1['Start_Time'].dt.hour, bins = 24)
+
+plt.xlabel("End_Time")
+plt.ylabel("Number of Occurence")
+plt.title('Accidents Count By Time of Day')
+
+plt.show()
+df1.groupby('Severity').count()
+df_num.plot(kind='scatter', y='Start_Lat', x='Severity')
+sns.jointplot(x=df_num.Start_Lat.values , y=df_num.Start_Lng.values,height=10)
+plt.ylabel('Start lattitude', fontsize=12)
+plt.xlabel('Start lattitude', fontsize=12)
+plt.show()
+sns.jointplot(x=df_num.End_Lat.values , y=df_num.End_Lng.values,height=10)
+plt.ylabel('end lattitude', fontsize=12)
+plt.xlabel('end longitude', fontsize=12)
+plt.show()
